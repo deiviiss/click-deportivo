@@ -32,3 +32,29 @@ model User {
 
   @@map("users")
 }
+
+model Photo {
+  id             String       @id @default(uuid())
+  url            String
+  photographerId String
+  photographer   Photographer @relation(fields: [photographerId], references: [id])
+
+  event     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+
+  @@map("photos")
+}
+
+model Photographer {
+  id     String  @id @default(uuid())
+  name   String
+  email  String
+  phone  String
+  photos Photo[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+
+  @@map("photographers")
+}

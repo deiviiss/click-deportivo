@@ -6,8 +6,10 @@ import prisma from '@/libs/prisma'
 export async function GET() {
   // DELETE ALL data
   await prisma.user.deleteMany()
+  await prisma.photo.deleteMany()
+  await prisma.photographer.deleteMany()
 
-  // Crear usuarios de prueba
+  // Create test users
   await prisma.user.createMany({
     data: [
       {
@@ -26,6 +28,24 @@ export async function GET() {
     ]
   }
   )
+
+  // create test photographers
+  await prisma.photographer.createMany({
+    data: [
+      {
+        id: '26d0a232-63c5-4cd4-a388-a047580e95f7',
+        name: 'John Doe',
+        email: 'photographer1@mail.com',
+        phone: '9811685678'
+      },
+      {
+        id: 'd1f1b0d0-4d3f-4f9c-8f6c-7a7f9f4f3c1b',
+        name: 'Juan Perez',
+        email: 'photographer2@mail.com',
+        phone: '9811685678'
+      }
+    ]
+  })
 
   revalidatePath('/')
   redirect('/')

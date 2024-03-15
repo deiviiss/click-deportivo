@@ -20,14 +20,14 @@ export const LoginForm = () => {
     <form action={dispatch} className="flex flex-col gap-3">
       <label htmlFor="email">Correo electrónico</label>
       <input
-        className="px-5 py-2 border bg-gray-200 rounded mb-5"
+        className="px-5 py-2 border bg-gray-200 rounded mb-5 text-black focus:outline-none focus:border-gray-800"
         type="email"
         name="email"
       />
 
       <label htmlFor="password">Contraseña</label>
       <input
-        className="px-5 py-2 border bg-gray-200 rounded mb-5"
+        className="px-5 py-2 border bg-gray-200 rounded mb-5 text-black focus:outline-none focus:border-gray-800"
         type="password"
         name="password"
       />

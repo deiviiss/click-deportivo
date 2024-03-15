@@ -54,9 +54,9 @@ export const UploadImageForm = ({ photographers, events }: UploadImageFormProps)
           <select
             id='event'
             name='eventId'
-            className='peer block w-full rounded-md border border-gray-200 py-2 text-sm outline-2 placeholder:text-gray-500'
+            className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
           >
-            <option value='' disabled>
+            <option value=''>
               Selecciona un evento
             </option>
             {events.map((event) => (
@@ -74,9 +74,9 @@ export const UploadImageForm = ({ photographers, events }: UploadImageFormProps)
           <select
             id='photographer'
             name='photographerId'
-            className='peer block w-full rounded-md border border-gray-200 py-2 text-sm outline-2 placeholder:text-gray-500'
+            className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
           >
-            <option value='' disabled>
+            <option value=''>
               Selecciona un fotografo
             </option>
             {photographers.map((photographer) => (
@@ -89,7 +89,7 @@ export const UploadImageForm = ({ photographers, events }: UploadImageFormProps)
 
         <label htmlFor="imgFile">Imagenes:</label>
         <input
-          className="px-5 py-2 border bg-gray-200 rounded mb-5"
+          className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
           type="file"
           name="imgFile"
           onChange={handleImageChange}

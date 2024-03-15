@@ -25,7 +25,7 @@ export const PhotosGrid = ({ photos }: Props) => {
         <PhotoSlideshow images={slices} title='Peleas semifinales' />
       </div>
 
-      <div className='col-span-1 px-5 shadow-lg rounded-lg'>
+      <div className='col-span-1 p-5 shadow-2xl rounded-lg bg-red-900 bg-opacity-80'>
         <div className='flex flex-col gap-3'>
           {
             allPhotosSameEvent

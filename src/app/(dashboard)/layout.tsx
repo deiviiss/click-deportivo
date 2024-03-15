@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getUserSessionServer } from '@/auth'
+import { Sidebar, TopMenu } from '@/components'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -20,6 +21,8 @@ export default async function DashboardLayout({
 
   return (
     <main className='flex flex-col items-center justify-center w-full p-2' >
+      <TopMenu />
+      <Sidebar />
       {children}
     </main >
   )

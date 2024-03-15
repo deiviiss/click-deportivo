@@ -40,18 +40,10 @@ export default async function ShowImagesPage({
     }
   })
 
-  // const uniqueEvents: string[] = []
-
-  // images.forEach((image) => {
-  //   if (!uniqueEvents.includes(image.event.name)) {
-  //     uniqueEvents.push(image.event.name)
-  //   }
-  // })
-
   return (
     <>
-      <div className='flex flex-col gap-3 py-4'>
-        <Title title='Pagina para mostrar imagenes' className='text-center text-2xl' subtitle='' />
+      <div className='flex flex-col gap-3 py-6'>
+        <Title title='Pagina para mostrar imagenes' className='text-center text-xl' subtitle='Todas las imagenes de todos los eventos' />
 
         <PhotoFilter events={events} />
       </div>

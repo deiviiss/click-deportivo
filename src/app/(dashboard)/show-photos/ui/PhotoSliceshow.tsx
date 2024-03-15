@@ -41,7 +41,6 @@ export const PhotoSlideshow = ({ images, title }: PhotoSlideshowProps) => {
           swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null
         }}
         modules={[FreeMode, Navigation, Thumbs, Autoplay]}
-        className="mySwiper2"
       >
 
         {

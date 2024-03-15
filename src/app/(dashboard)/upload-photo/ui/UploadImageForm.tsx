@@ -1,5 +1,6 @@
 'use client'
 
+import { type Event } from '@prisma/client'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
@@ -8,9 +9,10 @@ import { uploadPhoto } from '@/photos/actions/upload-photo'
 
 interface UploadImageFormProps {
   photographers: PhotographerForm[]
+  events: Event[]
 }
 
-export const UploadImageForm = ({ photographers }: UploadImageFormProps) => {
+export const UploadImageForm = ({ photographers, events }: UploadImageFormProps) => {
   const [state, dispatch] = useFormState(uploadPhoto, undefined)
 
   const [image, setImage] = useState('')
@@ -48,7 +50,22 @@ export const UploadImageForm = ({ photographers }: UploadImageFormProps) => {
     <>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <label htmlFor="event">Evento:</label>
-        <input className="px-5 py-2 border bg-gray-200 rounded mb-5" type="text" name="event" />
+        <div className='relative'>
+          <select
+            id='event'
+            name='eventId'
+            className='peer block w-full rounded-md border border-gray-200 py-2 text-sm outline-2 placeholder:text-gray-500'
+          >
+            <option value='' disabled>
+              Selecciona un evento
+            </option>
+            {events.map((event) => (
+              <option key={event.id} value={event.id}>
+                {event.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <label htmlFor='photographer'>
           Selecciona al fotografo

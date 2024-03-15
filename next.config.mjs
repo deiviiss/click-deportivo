@@ -8,6 +8,10 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'previews.123rf.com'
+      },
+      {
+        protocol: 'https',
         hostname: 'avatars.githubusercontent.com'
       },
       {

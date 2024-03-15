@@ -39,7 +39,7 @@ export const uploadPhoto = async (
     await prisma.photo.create({
       data: {
         url: imageUrl,
-        event: formData.get('event') as string,
+        eventId: formData.get('eventId') as string,
         photographerId: formData.get('photographerId') as string
       }
     })

@@ -39,11 +39,26 @@ model Photo {
   photographerId String
   photographer   Photographer @relation(fields: [photographerId], references: [id])
 
-  event     String
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+
   createdAt DateTime  @default(now())
   updatedAt DateTime?
 
   @@map("photos")
+}
+
+model Event {
+  id          String    @id @default(uuid())
+  name        String
+  date        DateTime
+  location    String
+  description String
+  photos      Photo[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+
+  @@map("events")
 }
 
 model Photographer {

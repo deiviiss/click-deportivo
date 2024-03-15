@@ -53,7 +53,7 @@ export const Carousel = ({
               alt={slide.url}
             />
             <div className="absolute bottom-0 w-full text-white text-center bg-black bg-opacity-50 p-2"> {/* Estilo para el texto */}
-              {slide.event}
+              {slide.eventId}
             </div>
           </div>
         ))}

@@ -19,7 +19,7 @@ export default async function DashboardLayout({
   if (!isAdmin) redirect('/')
 
   return (
-    <main className='flex flex-col items-center justify-center w-full h-screen p-2' >
+    <main className='flex flex-col items-center justify-center w-full p-2' >
       {children}
     </main >
   )

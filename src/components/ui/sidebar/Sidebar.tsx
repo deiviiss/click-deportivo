@@ -2,16 +2,22 @@
 
 import clsx from 'clsx'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { IoCloseOutline, IoLogInOutline, IoLogOutOutline, IoPeopleOutline, IoPersonOutline, IoSearchOutline } from 'react-icons/io5'
 import { MdOutlineEmojiEvents, MdOutlinePhotoCamera, MdOutlinePhoto } from 'react-icons/md'
+import { logout } from '@/auth'
 import { useUiStore } from '@/store'
 
 export const Sidebar = () => {
+  const { data } = useSession()
+
+  const user = data?.user
+
   const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen)
   const closeMenu = useUiStore((state) => state.closeSideMenu)
 
   return (
-    <div>
+    <>
       {
         isSideMenuOpen && (
           <>
@@ -53,51 +59,68 @@ export const Sidebar = () => {
         {/* menú */}
         <div>
           <Link href='/profile'
-            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'>
+            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+            onClick={() => { closeMenu() }}
+          >
             <IoPersonOutline size={30} />
             <span className='ml-3 text-xl'>Perfil</span>
           </Link>
 
           <Link href='/show-photos'
-            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'>
+            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+            onClick={() => { closeMenu() }}
+          >
             <MdOutlinePhoto size={30} />
             <span className='ml-3 text-xl'>Fotos</span>
           </Link>
 
-          <Link href='/'
-            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'>
-            <IoLogInOutline size={30} />
-            <span className='ml-3 text-xl'>Ingresar</span>
+          <Link href='/photographers'
+            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+            onClick={() => { closeMenu() }}
+          >
+            <MdOutlinePhotoCamera size={30} />
+            <span className='ml-3 text-xl'>Fotógrafos</span>
           </Link>
 
-          <Link href='/'
-            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'>
-            <IoLogOutOutline size={30} />
-            <span className='ml-3 text-xl'>Salir</span>
-          </Link>
+          {
+            user
+              ? <button
+                className='w-full flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+                onClick={async () => { await logout() }}
+              >
+                <IoLogOutOutline size={30} />
+                <span className='ml-3 text-xl'>Salir</span>
+              </button>
+              : <Link
+                href='/auth/login'
+                className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+                onClick={() => { closeMenu() }}
+              >
+                <IoLogInOutline size={30} />
+                <span className='ml-3 text-xl'>Ingresar</span>
+              </Link>
+          }
 
-          <div className="w-full h-px bg-gray-100 rounded transition-all"></div>
+          <div className="w-full h-px bg-gray-100 rounded transition-all mt-10"></div>
         </div>
 
         <Link href='/events'
-          className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'>
+          className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+          onClick={() => { closeMenu() }}
+        >
           <MdOutlineEmojiEvents size={30} />
           <span className='ml-3 text-xl'>Eventos</span>
         </Link>
 
-        <Link href='/photographers'
-          className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'>
-          <MdOutlinePhotoCamera size={30} />
-          <span className='ml-3 text-xl'>Fotógrafos</span>
-        </Link>
-
-        <Link href='/'
-          className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'>
+        <Link href='/users'
+          className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+          onClick={() => { closeMenu() }}
+        >
           <IoPeopleOutline size={30} />
           <span className='ml-3 text-xl'>Usuarios</span>
         </Link>
       </nav>
 
-    </div>
+    </>
   )
 }

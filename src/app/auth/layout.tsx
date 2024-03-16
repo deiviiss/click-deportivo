@@ -8,7 +8,7 @@ export default async function AuthLayout({
 }>) {
   const user = await getUserSessionServer()
 
-  if (user) redirect('/')
+  if (user) redirect('/profile')
 
   return (
     <main>

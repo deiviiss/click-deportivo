@@ -1,18 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
 import { authenticate } from '@/auth'
 
 export const LoginForm = () => {
-  const router = useRouter()
   const [state, dispatch] = useFormState(authenticate, undefined)
 
   useEffect(() => {
     if (state === 'SuccessSignin') {
-      router.push('/profile')
+      window.location.replace('/profile')
     }
   }, [state])
 

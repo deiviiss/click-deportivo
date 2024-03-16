@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
-import { redirect } from 'next/navigation'
 import { PhotoFilter } from './ui/PhotosFilter'
 import { PhotosGrid } from './ui/PhotosGrid'
-import { getUserSessionServer } from '@/auth'
 import { Title } from '@/components'
 import prisma from '@/libs/prisma'
 
@@ -18,11 +16,6 @@ export default async function ShowImagesPage({
     event?: string
   }
 }): Promise<JSX.Element> {
-  const user = await getUserSessionServer()
-  const isAdmin = user?.roles.includes('admin')
-  if (!user) redirect('/auth/login')
-  if (!isAdmin) redirect('/')
-
   const eventQuery = searchParams?.event || ''
   const event = eventQuery || {}
 

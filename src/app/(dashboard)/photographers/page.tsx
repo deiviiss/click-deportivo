@@ -1,6 +1,4 @@
 import type { Metadata } from 'next'
-import { redirect } from 'next/navigation'
-import { getUserSessionServer } from '@/auth'
 import { Title } from '@/components'
 import prisma from '@/libs/prisma'
 
@@ -16,17 +14,12 @@ export default async function EventosPage({
     event?: string
   }
 }): Promise<JSX.Element> {
-  const user = await getUserSessionServer()
-  const isAdmin = user?.roles.includes('admin')
-  if (!user) redirect('/auth/login')
-  if (!isAdmin) redirect('/')
-
   const photographers = await prisma.photographer.findMany()
 
   return (
     <>
       <div className='flex flex-col gap-3 py-6'>
-        <Title title='Pagina para administrar los eventos' className='text-center text-xl' subtitle='' />
+        <Title title='Página de los fotografos' className='text-center text-xl' subtitle='Aquí pueden ir listado todos los fotógrafos del equipo.' />
         <p className='flex flex-col'>
           {photographers.map((photographer) => (
             <div key={photographer.id} className='flex flex-col gap-3'>

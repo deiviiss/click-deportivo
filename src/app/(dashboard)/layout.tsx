@@ -14,10 +14,7 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }>) {
   const user = await getUserSessionServer()
-  const isAdmin = user?.roles.includes('admin')
-
   if (!user) redirect('/auth/login')
-  if (!isAdmin) redirect('/')
 
   return (
     <main className='flex flex-col items-center justify-center w-full p-2' >

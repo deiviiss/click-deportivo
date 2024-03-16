@@ -12,8 +12,6 @@ export const metadata: Metadata = {
 export default async function UsersPage() {
   const user = await getUserSessionServer()
   const isAdmin = user?.roles.includes('admin')
-
-  if (!user) redirect('/auth/login')
   if (!isAdmin) redirect('/')
 
   const users = await prisma.user.findMany()

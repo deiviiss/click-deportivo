@@ -20,8 +20,8 @@ export const TopMenu = () => {
 
       {/* center menu */}
       <div className='hidden sm:block'>
-        <Link href={'/events'} className='m-2 p-2 rounded-md transition-all hover:bg-gray-400'>Eventos</Link>
         <Link href={'/show-photos'} className='m-2 p-2 rounded-md transition-all hover:bg-gray-400'>Fotos</Link>
+        <Link href={'/photographers'} className='m-2 p-2 rounded-md transition-all hover:bg-gray-400'>Fotógrafos</Link>
       </div>
 
       {/* upload photo */}

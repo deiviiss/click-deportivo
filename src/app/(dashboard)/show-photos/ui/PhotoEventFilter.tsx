@@ -7,7 +7,7 @@ interface PhotoFilterProps {
   events: Event[]
 }
 
-export function PhotoFilter({ events }: PhotoFilterProps): JSX.Element {
+export function PhotoEventFilter({ events }: PhotoFilterProps): JSX.Element {
   const filterParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -21,7 +21,7 @@ export function PhotoFilter({ events }: PhotoFilterProps): JSX.Element {
   }
 
   return (
-    <div className='flex flex-col' >
+    <div className='flex flex-col py-5' >
       <div className='flex justify-center items-center gap-2'>
         <label htmlFor='event'>
           Evento

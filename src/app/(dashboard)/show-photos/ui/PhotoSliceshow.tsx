@@ -16,10 +16,10 @@ import './slideshow.css'
 
 interface PhotoSlideshowProps {
   images: string[]
-  title: string
+  alt: string
 }
 
-export const PhotoSlideshow = ({ images, title }: PhotoSlideshowProps) => {
+export const PhotoSlideshow = ({ images, alt }: PhotoSlideshowProps) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperObject>()
 
   const swiperStyle: Record<string, string> = {
@@ -51,7 +51,7 @@ export const PhotoSlideshow = ({ images, title }: PhotoSlideshowProps) => {
                   width={1024}
                   height={800}
                   src={image}
-                  alt={title}
+                  alt={alt}
                   className='rounded-lg object-fill'
                 />
               </SwiperSlide>
@@ -75,7 +75,7 @@ export const PhotoSlideshow = ({ images, title }: PhotoSlideshowProps) => {
                 width={300}
                 height={300}
                 src={image}
-                alt={title}
+                alt={alt}
                 className='rounded-lg object-fill'
               />
             </SwiperSlide>

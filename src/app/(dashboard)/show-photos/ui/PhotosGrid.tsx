@@ -19,14 +19,14 @@ export const PhotosGrid = ({ photos }: Props) => {
   const uniqueEvents = Array.from(new Map(photos.map(photo => [photo.event.id, photo.event])).values())
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
+    <div className='grid grid-cols-1 md:grid-cols-3 gap-3 max-w-[1400px]'>
 
       <div className='col-span-1 md:col-span-2'>
-        <PhotoSlideshow images={slices} title='Peleas semifinales' />
+        <PhotoSlideshow images={slices} alt='slides-images' />
       </div>
 
-      <div className='col-span-1 p-5 shadow-2xl rounded-lg bg-red-900 bg-opacity-80'>
-        <div className='flex flex-col gap-3'>
+      <div className='col-span-1 p-5 shadow-2xl rounded-lg bg-sky-900 bg-opacity-80'>
+        <div className='flex flex-col gap-3 flex-shrink-0'>
           {
             allPhotosSameEvent
               ? <>

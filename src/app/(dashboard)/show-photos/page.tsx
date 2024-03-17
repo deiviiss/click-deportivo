@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { PhotoFilter } from './ui/PhotosFilter'
 import { PhotosGrid } from './ui/PhotosGrid'
 import { Title } from '@/components'
 import prisma from '@/libs/prisma'
@@ -19,8 +18,6 @@ export default async function ShowImagesPage({
   const eventQuery = searchParams?.event || ''
   const event = eventQuery || {}
 
-  const events = await prisma.event.findMany()
-
   const images = await prisma.photo.findMany({
     where: {
       event: {
@@ -37,8 +34,6 @@ export default async function ShowImagesPage({
     <>
       <div className='flex flex-col gap-3 py-6'>
         <Title title='Pagina para mostrar imagenes' className='text-center text-xl' subtitle='Todas las imagenes de todos los eventos' />
-
-        <PhotoFilter events={events} />
       </div>
 
       <PhotosGrid photos={images} />

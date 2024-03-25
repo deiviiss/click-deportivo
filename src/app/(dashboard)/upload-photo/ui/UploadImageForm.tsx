@@ -1,6 +1,6 @@
 'use client'
 
-import { type Event } from '@prisma/client'
+import { type State, type Category, type Event } from '@prisma/client'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
@@ -10,9 +10,11 @@ import { uploadPhoto } from '@/photos/actions/upload-photo'
 interface UploadImageFormProps {
   photographers: PhotographerForm[]
   events: Event[]
+  categories: Category[]
+  states: State[]
 }
 
-export const UploadImageForm = ({ photographers, events }: UploadImageFormProps) => {
+export const UploadImageForm = ({ photographers, events, categories, states }: UploadImageFormProps) => {
   const [state, dispatch] = useFormState(uploadPhoto, undefined)
 
   const [image, setImage] = useState('')
@@ -66,6 +68,49 @@ export const UploadImageForm = ({ photographers, events }: UploadImageFormProps)
             ))}
           </select>
         </div>
+
+        <label htmlFor="category">Categoria:</label>
+        <div className='relative'>
+          <select
+            id='category'
+            name='categoryId'
+            className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
+          >
+            <option value=''>
+              Selecciona un categoria
+            </option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <label htmlFor="state">Estado:</label>
+        <div className='relative'>
+          <select
+            id='state'
+            name='stateId'
+            className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
+          >
+            <option value=''>
+              Selecciona un estado:
+            </option>
+            {states.map((state) => (
+              <option key={state.id} value={state.id}>
+                {state.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <label htmlFor="numberPlayer">No. jugador::</label>
+        <input
+          className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
+          type="number"
+          name="numberPlayer"
+        />
 
         <label htmlFor='photographer'>
           Selecciona al fotografo

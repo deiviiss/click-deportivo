@@ -33,14 +33,41 @@ model User {
   @@map("users")
 }
 
+model State {
+  id   String @id @default(uuid())
+  name String
+  code String
+
+  Photo Photo[]
+
+  @@map("states")
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String
+
+  Photo Photo[]
+
+  @@map("categories")
+}
+
 model Photo {
-  id             String       @id @default(uuid())
-  url            String
+  id           String @id @default(uuid())
+  url          String
+  numberPlayer Int
+
   photographerId String
   photographer   Photographer @relation(fields: [photographerId], references: [id])
 
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
   eventId String
   event   Event  @relation(fields: [eventId], references: [id])
+
+  stateId String
+  state   State  @relation(fields: [stateId], references: [id])
 
   createdAt DateTime  @default(now())
   updatedAt DateTime?

@@ -1,6 +1,8 @@
-import { type Event, type Photo, type Photographer } from '@prisma/client'
+import { type Category, type State, type Event, type Photo, type Photographer } from '@prisma/client'
 
-export interface PhotoWithPhotographer extends Photo {
+export interface PhotoShow extends Photo {
   photographer: Photographer
   event: Event
+  category: Category
+  state: State
 }

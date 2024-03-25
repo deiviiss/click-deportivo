@@ -17,12 +17,14 @@ export default async function UploadImagesPage() {
 
   const photographers = await prisma.photographer.findMany()
   const events = await prisma.event.findMany()
+  const categories = await prisma.category.findMany()
+  const states = await prisma.state.findMany()
 
   return (
     <div>
       <Title title='Pagina para subir imagenes' className='text-center' subtitle='' />
 
-      <UploadImageForm photographers={photographers} events={events} />
+      <UploadImageForm photographers={photographers} events={events} categories={categories} states={states} />
     </div>
   )
 }

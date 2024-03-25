@@ -26,7 +26,9 @@ export default async function ShowImagesPage({
     },
     include: {
       photographer: true,
-      event: true
+      event: true,
+      category: true,
+      state: true
     }
   })
 

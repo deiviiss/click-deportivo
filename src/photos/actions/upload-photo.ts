@@ -40,7 +40,10 @@ export const uploadPhoto = async (
       data: {
         url: imageUrl,
         eventId: formData.get('eventId') as string,
-        photographerId: formData.get('photographerId') as string
+        photographerId: formData.get('photographerId') as string,
+        categoryId: formData.get('categoryId') as string,
+        stateId: formData.get('stateId') as string,
+        numberPlayer: Number(formData.get('numberPlayer'))
       }
     })
   } catch (error) {

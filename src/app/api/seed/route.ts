@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
+import { NextResponse } from 'next/server'
 import cloudinary from '@/libs/cloudinary'
 import prisma from '@/libs/prisma'
 
@@ -10,6 +9,8 @@ export async function GET() {
   await prisma.photo.deleteMany()
   await prisma.event.deleteMany()
   await prisma.photographer.deleteMany()
+  await prisma.category.deleteMany()
+  await prisma.state.deleteMany()
 
   // clean cloudinary
   await cloudinary.api.delete_resources_by_prefix('click-deportivo')
@@ -79,42 +80,99 @@ export async function GET() {
     ]
   })
 
-  //
+  // create categories
+  await prisma.category.createMany({
+    data: [
+      {
+        id: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2a',
+        name: 'Karate'
+      },
+      {
+        id: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2q',
+        name: 'Lucha'
+      },
+      {
+        id: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2w',
+        name: 'Soccer'
+      }
+    ]
+  })
+
+  // create states
+  await prisma.state.createMany({
+    data: [
+      {
+        id: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c12',
+        name: 'Aguascalientes',
+        code: 'AGS'
+      },
+      {
+        id: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c13',
+        name: 'Baja California',
+        code: 'BC'
+      },
+      {
+        id: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c14',
+        name: 'Baja California Sur',
+        code: 'BCS'
+      }
+    ]
+
+  })
+
+  // create photos
   await prisma.photo.createMany({
     data: [
       {
         url: 'https://res.cloudinary.com/api-post-img/image/upload/v1710333597/seeds/click-deportivo/lucha_1.jpg',
         photographerId: '26d0a232-63c5-4cd4-a388-a047580e95f7',
-        eventId: '959dc135-4b76-4cd1-b008-9186ec06f381'
+        eventId: '959dc135-4b76-4cd1-b008-9186ec06f381',
+        stateId: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c12',
+        categoryId: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2a',
+        numberPlayer: 10
       },
       {
         url: 'https://res.cloudinary.com/api-post-img/image/upload/v1710333597/seeds/click-deportivo/lucha_2',
         photographerId: 'd1f1b0d0-4d3f-4f9c-8f6c-7a7f9f4f3c1b',
-        eventId: '959dc135-4b76-4cd1-b008-9186ec06f381'
+        eventId: '959dc135-4b76-4cd1-b008-9186ec06f381',
+        stateId: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c13',
+        categoryId: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2q',
+        numberPlayer: 10
       },
       {
         url: 'https://res.cloudinary.com/api-post-img/image/upload/v1710333597/seeds/click-deportivo/karate_1.jpg',
         photographerId: '26d0a232-63c5-4cd4-a388-a047580e95f7',
-        eventId: '83e625e2-e932-4d26-9afe-c99979a40a24'
+        eventId: '83e625e2-e932-4d26-9afe-c99979a40a24',
+        stateId: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c14',
+        categoryId: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2w',
+        numberPlayer: 1
       },
       {
         url: 'https://res.cloudinary.com/api-post-img/image/upload/v1710333597/seeds/click-deportivo/karate_2.jpg',
         photographerId: '26d0a232-63c5-4cd4-a388-a047580e95f7',
-        eventId: '83e625e2-e932-4d26-9afe-c99979a40a24'
+        eventId: '83e625e2-e932-4d26-9afe-c99979a40a24',
+        stateId: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c12',
+        categoryId: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2a',
+        numberPlayer: 1
       },
       {
         url: 'https://res.cloudinary.com/api-post-img/image/upload/v1710333597/seeds/click-deportivo/soccer_1.jpg',
         photographerId: '26d0a232-63c5-4cd4-a388-a047580e95f7',
-        eventId: 'f1b0d0-4d3f-4f9c-8f6c-7a7f9f4f3c1b'
+        eventId: 'f1b0d0-4d3f-4f9c-8f6c-7a7f9f4f3c1b',
+        stateId: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c13',
+        categoryId: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2q',
+        numberPlayer: 22
       },
       {
         url: 'https://res.cloudinary.com/api-post-img/image/upload/v1710333597/seeds/click-deportivo/soccer_2.jpg',
         photographerId: '26d0a232-63c5-4cd4-a388-a047580e95f7',
-        eventId: 'f1b0d0-4d3f-4f9c-8f6c-7a7f9f4f3c1b'
+        eventId: 'f1b0d0-4d3f-4f9c-8f6c-7a7f9f4f3c1b',
+        stateId: 'd5b0d2e0-4d3f-4f9c-8f6c-7a7f9f4f3c14',
+        categoryId: 'c5b0d1d0-4d3f-4f9c-8f6c-7a7f9f4f3c2w',
+        numberPlayer: 22
       }
     ]
   })
 
-  revalidatePath('/')
-  redirect('/')
+  return NextResponse.json({ message: 'Executed seeded' })
 }

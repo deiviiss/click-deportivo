@@ -55,14 +55,14 @@ export const SideFilter = ({ events }: Props) => {
         </div>
 
         {/* filtros */}
-        <>
+        <div className='flex flex-col items-center'>
 
           <PhotoEventFilter events={events} />
 
-          <button onClick={closeFilter} className='w-full rounded-md py-2 bg-red-800 hover:bg-red-500'>Cerrar</button>
+          <button onClick={closeFilter} className='btn-primary'>Aplicar</button>
 
           <div className="w-full h-px bg-gray-100 rounded transition-all mt-10"></div>
-        </>
+        </div>
 
       </nav>
 

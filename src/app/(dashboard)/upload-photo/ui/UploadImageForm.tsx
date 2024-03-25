@@ -1,6 +1,7 @@
 'use client'
 
 import { type State, type Category, type Event } from '@prisma/client'
+import clsx from 'clsx'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
@@ -17,22 +18,23 @@ interface UploadImageFormProps {
 export const UploadImageForm = ({ photographers, events, categories, states }: UploadImageFormProps) => {
   const [state, dispatch] = useFormState(uploadPhoto, undefined)
 
-  const [image, setImage] = useState('')
+  const [images, setImages] = useState<string[]>([])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const file = e.target.files[0]
-      const reader = new FileReader()
-
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-          setImage(reader.result)
+      const files = Array.from(e.target.files)
+      files.forEach(file => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          if (typeof reader.result === 'string') {
+            const result = reader.result
+            setImages((prevImages) => [...prevImages, result])
+          }
         }
-      }
-
-      if (file instanceof Blob) {
-        reader.readAsDataURL(file)
-      }
+        if (file instanceof Blob) {
+          reader.readAsDataURL(file)
+        }
+      })
     }
   }
 
@@ -41,10 +43,8 @@ export const UploadImageForm = ({ photographers, events, categories, states }: U
 
     const target = event.target as HTMLFormElement
     const formData = new FormData(target)
-    formData.append('img', image)
-
+    images.forEach((img, index) => { formData.append(`img${index}`, img) })
     formData.delete('imgFile')
-
     dispatch(formData)
   }
 
@@ -137,6 +137,7 @@ export const UploadImageForm = ({ photographers, events, categories, states }: U
           className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
           type="file"
           name="imgFile"
+          multiple
           onChange={handleImageChange}
         />
 
@@ -173,14 +174,13 @@ function SubmitButton() {
   return (
     <button
       type="submit"
-      className='btn-primary'
-      // className={clsx({
-      //   'btn-primary': !pending,
-      //   'btn-disabled': pending
-      // })}
+      className={clsx({
+        'btn-primary': !pending,
+        'btn-disabled': pending
+      })}
       disabled={pending}
     >
-      Subir
+      {pending ? 'Subiendo...' : 'Subir'}
     </button>
   )
 }

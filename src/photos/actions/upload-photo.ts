@@ -9,43 +9,47 @@ export const uploadPhoto = async (
   prevState: string | undefined,
   formData: FormData) => {
   try {
-    const image = formData.get('img')
+    // Assume that the field name in the FormData was updated to img0, img1, ...
+    let index = 0
+    let image
+    const imagesUrls = []
 
-    if (!image || typeof image !== 'string') {
-      return 'No se guardo la imagen, carga la imagen.'
+    // itera about each image received
+    while ((image = formData.get(`img${index}`)) && typeof image === 'string') {
+      const base64Data = image.replace(/^data:image\/\w+;base64,/, '')
+      const buffer = Buffer.from(base64Data, 'base64')
+
+      // upload img to cloudinary
+      const result: { secure_url: string } = await new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream({ folder: 'click-deportivo' }, (err, result) => {
+          if (err) {
+            reject(err)
+          }
+
+          if (result) {
+            resolve({ secure_url: result.secure_url })
+          }
+        }).end(buffer)
+      })
+
+      // save the url of the image uploaded
+      imagesUrls.push(result.secure_url)
+      index++
     }
 
-    // convert the base64 encoded image to a Buffer
-    const base64Data = image.replace(/^data:image\/\w+;base64,/, '')
-    const buffer = Buffer.from(base64Data, 'base64')
-
-    // saved img to cloudinary
-    const result: { secure_url: string } = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream({ folder: 'click-deportivo' }, (err, result) => {
-        if (err) {
-          reject(err)
+    // save every image to the database
+    for (const imageUrl of imagesUrls) {
+      await prisma.photo.create({
+        data: {
+          url: imageUrl,
+          eventId: formData.get('eventId') as string,
+          photographerId: formData.get('photographerId') as string,
+          categoryId: formData.get('categoryId') as string,
+          stateId: formData.get('stateId') as string,
+          numberPlayer: Number(formData.get('numberPlayer'))
         }
-
-        if (result) {
-          resolve({ secure_url: result.secure_url })
-        }
-      }).end(buffer)
-    })
-
-    // get the url of the image
-    const imageUrl = result.secure_url
-
-    // save the image to the database
-    await prisma.photo.create({
-      data: {
-        url: imageUrl,
-        eventId: formData.get('eventId') as string,
-        photographerId: formData.get('photographerId') as string,
-        categoryId: formData.get('categoryId') as string,
-        stateId: formData.get('stateId') as string,
-        numberPlayer: Number(formData.get('numberPlayer'))
-      }
-    })
+      })
+    }
   } catch (error) {
     return 'ErrorUploadingImage'
   }

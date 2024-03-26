@@ -40,13 +40,13 @@ export async function GET() {
     data: [
       {
         id: '26d0a232-63c5-4cd4-a388-a047580e95f7',
-        name: 'John Doe',
+        name: 'Diego Avila',
         email: 'photographer1@mail.com',
         phone: '9811685678'
       },
       {
         id: 'd1f1b0d0-4d3f-4f9c-8f6c-7a7f9f4f3c1b',
-        name: 'Juan Perez',
+        name: 'David Hilera',
         email: 'photographer2@mail.com',
         phone: '9811685678'
       }
@@ -58,21 +58,21 @@ export async function GET() {
     data: [
       {
         id: '83e625e2-e932-4d26-9afe-c99979a40a24',
-        name: 'Peleas Semifinales Karate',
+        name: 'Semifinales',
         date: new Date(),
         location: 'Coliseo Amauta',
         description: 'Un emocionante torneo que presenta a los mejores luchadores de karate en la ronda de semifinales. Ven y siente la pasión y el espíritu competitivo.'
       },
       {
         id: '959dc135-4b76-4cd1-b008-9186ec06f381',
-        name: 'Peleas Finales Luchas',
+        name: 'Finales',
         date: new Date(),
         location: 'Estadio Nacional',
         description: 'La gran final de lucha llega al Estadio Nacional, donde se coronará al campeón de esta temporada. No te pierdas la acción.'
       },
       {
         id: 'f1b0d0-4d3f-4f9c-8f6c-7a7f9f4f3c1b',
-        name: 'Soccer',
+        name: 'Fase grupos',
         date: new Date(),
         location: 'Coliseo Fragata',
         description: 'Disfruta de un partido lleno de energía y talento, donde los equipos luchan por la victoria. Una experiencia imperdible para los fans del fútbol.'

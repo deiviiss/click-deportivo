@@ -1,8 +1,11 @@
 'use client'
 
+import clsx from 'clsx'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 import { useEffect } from 'react'
 import { useFormState, useFormStatus } from 'react-dom'
+import { FcGoogle } from 'react-icons/fc'
 import { authenticate } from '@/auth'
 
 export const LoginForm = () => {
@@ -30,6 +33,8 @@ export const LoginForm = () => {
         name="password"
       />
 
+      <LoginButton />
+
       <div
         className="flex h-8 items-end space-x-1"
         aria-live="polite"
@@ -44,13 +49,23 @@ export const LoginForm = () => {
         )}
       </div>
 
-      <LoginButton />
+      <button
+        type='button'
+        onClick={async () => await signIn('google')}
+        className='btn-secondary flex items-center justify-center gap-4 w-full'
+      >
+        <FcGoogle
+          className='rounded bg-white p-1'
+          size={30}
+        />
+        Iniciar con google
+      </button>
 
       {/* divisor l ine */}
       <div className="flex items-center my-5">
-        <div className="flex-1 border-t border-gray-500"></div>
-        <div className="px-2 text-gray-800">O</div>
-        <div className="flex-1 border-t border-gray-500"></div>
+        <div className="flex-1 border-t border-gray-400"></div>
+        <div className="px-2 text-gray-200">O</div>
+        <div className="flex-1 border-t border-gray-400"></div>
       </div>
 
       <Link href="/auth/new-account" className="btn-secondary text-center">
@@ -66,10 +81,10 @@ function LoginButton() {
   return (
     <button
       type="submit"
-      // className={clsx({
-      //   'btn-primary': !pending,
-      //   'btn-disabled': pending
-      // })}
+      className={clsx({
+        'btn-primary': !pending,
+        'btn-disabled': pending
+      })}
       disabled={pending}
     >
       Ingresar

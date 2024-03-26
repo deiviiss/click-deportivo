@@ -12,10 +12,10 @@ export const PhotosGrid = ({ photos }: Props) => {
     return slice
   })
 
-  // Verificar si todas las fotos pertenecen al mismo evento
+  // Check if all photos belong to the same event
   const allPhotosSameEvent = photos.every(photo => photo.eventId === photos[0].eventId)
 
-  // Extraer los even <strong>tos únicos </strong>
+  // get unique events
   const uniqueEvents = Array.from(new Map(photos.map(photo => [photo.event.id, photo.event])).values())
 
   return (

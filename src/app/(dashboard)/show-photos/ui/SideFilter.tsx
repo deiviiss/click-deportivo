@@ -1,16 +1,20 @@
 'use client'
 
-import { type Event } from '@prisma/client'
+import { type State, type Event, type Category } from '@prisma/client'
 import clsx from 'clsx'
 import { IoCloseOutline, IoSearchOutline } from 'react-icons/io5'
+import { PhotoCategoryFilter } from './PhotoCategoryFilter'
 import { PhotoEventFilter } from './PhotoEventFilter'
+import { PhotoStateFilter } from './PhotoStateFilter'
 import { useFilterStore } from '@/store'
 
 interface Props {
   events: Event[]
+  states: State[]
+  categories: Category[]
 }
 
-export const SideFilter = ({ events }: Props) => {
+export const SideFilter = ({ events, states, categories }: Props) => {
   const isSideFilterOpen = useFilterStore((state) => state.isSideFilterOpen)
   const closeFilter = useFilterStore((state) => state.closeSideFilter)
 
@@ -58,6 +62,10 @@ export const SideFilter = ({ events }: Props) => {
         <div className='flex flex-col items-center'>
 
           <PhotoEventFilter events={events} />
+
+          <PhotoStateFilter states={states} />
+
+          <PhotoCategoryFilter categories={categories} />
 
           <button onClick={closeFilter} className='btn-primary'>Aplicar</button>
 

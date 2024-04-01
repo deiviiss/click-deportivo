@@ -12,7 +12,8 @@ export const metadata: Metadata = {
 
 export default async function UploadImagesPage() {
   const user = await getUserSessionServer()
-  const isAdmin = user?.roles.includes('admin')
+  const isAdmin = user?.roles?.includes('admin')
+
   if (!isAdmin) redirect('/')
 
   const photographers = await prisma.photographer.findMany()

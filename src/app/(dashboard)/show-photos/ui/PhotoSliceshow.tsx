@@ -28,10 +28,9 @@ export const PhotoSlideshow = ({ images, alt }: PhotoSlideshowProps) => {
   }
 
   return (
-    <>
+    <div className='flex flex-col'>
       <Swiper
         style={swiperStyle}
-
         spaceBetween={10}
         navigation={true}
         autoplay={{
@@ -41,6 +40,7 @@ export const PhotoSlideshow = ({ images, alt }: PhotoSlideshowProps) => {
           swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null
         }}
         modules={[FreeMode, Navigation, Thumbs, Autoplay]}
+        className='h-[500px]'
       >
 
         {
@@ -79,10 +79,9 @@ export const PhotoSlideshow = ({ images, alt }: PhotoSlideshowProps) => {
                 className='rounded-lg object-fill'
               />
             </SwiperSlide>
-
           ))
         }
       </Swiper>
-    </>
+    </div>
   )
 }

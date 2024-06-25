@@ -1,8 +1,8 @@
-import { type Category, type State, type Event, type Photo, type Photographer } from '@prisma/client'
+import { type State, type Event, type Photo, type Photographer, type Discipline } from '@prisma/client'
 
 export interface PhotoShow extends Photo {
   photographer: Photographer
   event: Event
-  category: Category
+  discipline: Discipline
   state: State
 }

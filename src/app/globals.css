@@ -34,11 +34,11 @@
 
 
 .btn-primary {
-  @apply bg-blue-600 hover:bg-blue-800 text-white py-2 px-4 rounded transition-all;
+  @apply bg-primary hover:opacity-95 text-white py-2 px-4 rounded transition-all border-2 border-secondary hover:bg-secondary hover:text-primary my-2;
 }
 
 .btn-secondary {
-  @apply bg-gray-800 hover:bg-gray-700 text-white py-2 px-4 rounded transition-all;
+  @apply bg-primary hover:opacity-95 text-white py-2 px-4 rounded transition-all border border-primary hover:border-tertiary;
 }
 
 .btn-disable {

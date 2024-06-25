@@ -16,16 +16,47 @@ export default async function UploadImagesPage() {
 
   if (!isAdmin) redirect('/')
 
-  const photographers = await prisma.photographer.findMany()
-  const events = await prisma.event.findMany()
-  const categories = await prisma.category.findMany()
-  const states = await prisma.state.findMany()
+  const photographers = await prisma.photographer.findMany({
+    orderBy: {
+      name: 'asc'
+    }
+  })
+  const events = await prisma.event.findMany({
+    orderBy: {
+      name: 'asc'
+    }
+  })
+  const disciplines = await prisma.discipline.findMany({
+    orderBy: {
+      name: 'asc'
+    }
+  })
+  const states = await prisma.state.findMany({
+    orderBy: {
+      name: 'asc'
+    }
+  })
+  const venues = await prisma.venue.findMany({
+    orderBy: {
+      name: 'asc'
+    }
+  })
+  const ramas = await prisma.rama.findMany({
+    orderBy: {
+      name: 'asc'
+    }
+  })
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: 'asc'
+    }
+  })
 
   return (
-    <div>
-      <Title title='Pagina para subir imagenes' className='text-center' subtitle='' />
+    <div className='p-3 pt-6 xl:pt-12'>
+      <Title title='Subir imagenes' className='w-full text-xl' subtitle='Formulario para subir imagenes' />
 
-      <UploadImageForm photographers={photographers} events={events} categories={categories} states={states} />
+      <UploadImageForm photographers={photographers} events={events} disciplines={disciplines} states={states} ramas={ramas} venues={venues} categories={categories} />
     </div>
   )
 }

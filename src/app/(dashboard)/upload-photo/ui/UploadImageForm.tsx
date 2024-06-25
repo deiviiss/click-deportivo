@@ -1,186 +1,405 @@
 'use client'
 
-import { type State, type Category, type Event } from '@prisma/client'
+import { type State, type Discipline, type Event, type Rama, type Venue, type Category } from '@prisma/client'
 import clsx from 'clsx'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useForm } from 'react-hook-form'
 import { type PhotographerForm } from '@/photographers'
 import { uploadPhoto } from '@/photos/actions/upload-photo'
 
-interface UploadImageFormProps {
+interface FormInputs {
+  photographer: string
+  discipline: string
+  event: string
+  state: string
+  venue: string
+  rama: string
+  category: string
+
+  images?: FileList
+}
+
+interface UploadImageProps {
   photographers: PhotographerForm[]
   events: Event[]
-  categories: Category[]
+  disciplines: Discipline[]
   states: State[]
+  ramas: Rama[]
+  venues: Venue[]
+  categories: Category[]
 }
 
-export const UploadImageForm = ({ photographers, events, categories, states }: UploadImageFormProps) => {
-  const [state, dispatch] = useFormState(uploadPhoto, undefined)
+export const UploadImageForm = ({ photographers, events, disciplines, states, ramas, venues, categories }: UploadImageProps) => {
+  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const [images, setImages] = useState<string[]>([])
+  const {
+    handleSubmit,
+    register,
+    formState: { isValid, errors }
+  } = useForm<FormInputs>()
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files)
-      files.forEach(file => {
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          if (typeof reader.result === 'string') {
-            const result = reader.result
-            setImages((prevImages) => [...prevImages, result])
-          }
-        }
-        if (file instanceof Blob) {
-          reader.readAsDataURL(file)
-        }
-      })
+  const onSubmit = async (data: FormInputs) => {
+    // setErrorMessage('')
+    setIsSubmitting(true)
+
+    const formData = new FormData()
+
+    const { images, ...dataPhotoToSave } = data
+
+    formData.append('photographer', dataPhotoToSave.photographer)
+    formData.append('discipline', data.discipline)
+    formData.append('event', data.event)
+    formData.append('state', data.state)
+    formData.append('venue', data.venue)
+    formData.append('rama', data.rama)
+    formData.append('category', data.category)
+
+    if (images) {
+      for (let i = 0; i < images.length; i++) {
+        formData.append('images', images[i])
+      }
     }
-  }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    // for (const key in data) {
+    //   formData.append(key, (data as any)[key])
+    // }
 
-    const target = event.target as HTMLFormElement
-    const formData = new FormData(target)
-    images.forEach((img, index) => { formData.append(`img${index}`, img) })
-    formData.delete('imgFile')
-    dispatch(formData)
+    const rta = await uploadPhoto(formData)
+
+    setIsSubmitting(false)
+
+    if (!rta.ok) {
+      setIsSubmitting(false)
+      setErrorMessage(rta.message)
+      return
+    }
+
+    router.push('/show-photos')
   }
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label htmlFor="event">Evento:</label>
-        <div className='relative'>
-          <select
-            id='event'
-            name='eventId'
-            className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
-          >
-            <option value=''>
-              Selecciona un evento
-            </option>
-            {events.map((event) => (
-              <option key={event.id} value={event.id}>
-                {event.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <label htmlFor="category">Categoria:</label>
-        <div className='relative'>
-          <select
-            id='category'
-            name='categoryId'
-            className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
-          >
-            <option value=''>
-              Selecciona un categoria
-            </option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <label htmlFor="state">Estado:</label>
-        <div className='relative'>
-          <select
-            id='state'
-            name='stateId'
-            className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
-          >
-            <option value=''>
-              Selecciona un estado:
-            </option>
-            {states.map((state) => (
-              <option key={state.id} value={state.id}>
-                {state.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <label htmlFor="numberPlayer">No. jugador::</label>
-        <input
-          className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
-          type="number"
-          name="numberPlayer"
-        />
-
-        <label htmlFor='photographer'>
-          Selecciona al fotografo
-        </label>
-        <div className='relative'>
-          <select
-            id='photographer'
-            name='photographerId'
-            className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
-          >
-            <option value=''>
-              Selecciona un fotografo
-            </option>
-            {photographers.map((photographer) => (
-              <option key={photographer.id} value={photographer.id}>
-                {photographer.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <label htmlFor="imgFile">Imagenes:</label>
-        <input
-          className="px-2 py-2 border bg-gray-200 mb-5 text-black focus:outline-none focus:border-gray-800 w-full peer block rounded-md"
-          type="file"
-          name="imgFile"
-          multiple
-          onChange={handleImageChange}
-        />
-
-        <div
-          className="flex h-8 items-end space-x-1"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {state === 'ErrorUploadingImage' && (
-            <div className="flex flex-row mb-2">
-              <p className="text-sm text-red-500">
-                No se ha guardado la imagen.
-              </p>
+    <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col' >
+      <div className="flex flex-col gap-5 md:grid md:grid-cols-2 my-3">
+        {/* event */}
+        <div className='flex flex-col'>
+          <div className='flex items-center justify-between gap-2'>
+            <label htmlFor="event">Evento:</label>
+            <div className='relative w-60'>
+              <select
+                id='eventId'
+                className={
+                  clsx(
+                    'px-2 py-2 border bg-gray-200 text-black focus:outline-none focus:border-gray-800 w-full peer block h-10 p-2 rounded-lg border-solid appearance-none',
+                    {
+                      'border-red-500': errors.event
+                    }
+                  )
+                }
+                {...register('event', { required: true })}
+              >
+                <option value=''>
+                  Selecciona un evento
+                </option>
+                {events.map((event) => (
+                  <option key={event.id} value={event.id}>
+                    {event.name}
+                  </option>
+                ))}
+              </select>
             </div>
-          )}
+          </div>
+          {
+            errors.event?.type === 'required'
+              ? (
+                <span className='text-red-500 text-sm pt-2'>* El evento es requerido</span>)
+              : (
+                <span className='h-7'></span>)
+          }
         </div>
 
-        <div className='flex justify-center items-center gap-5'>
-          <button type='button' className='btn-secondary'>
-            <Link href={'/'}>Cancelar</Link>
-          </button>
-          <SubmitButton />
+        {/* discipline */}
+        <div className="flex flex-col">
+          <div className='flex items-center justify-between gap-2'>
+            <label htmlFor="discipline">Disciplina:</label>
+            <div className='relative w-60'>
+              <select
+                id='disciplineId'
+                className={
+                  clsx(
+                    'px-2 py-2 border bg-gray-200 text-black focus:outline-none focus:border-gray-800 w-full peer block h-10 p-2 rounded-lg border-solid appearance-none',
+                    {
+                      'border-red-500': errors.discipline
+                    }
+                  )
+                }
+                {...register('discipline', { required: true })}
+              >
+                <option value=''>
+                  Selecciona una disciplina
+                </option>
+                {disciplines.map((discipline) => (
+                  <option key={discipline.id} value={discipline.id}>
+                    {discipline.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+          </div>
+          {
+            errors.discipline?.type === 'required'
+              ? (
+                <span className='text-red-500 text-sm pt-2'>* La disciplina es requerida</span>)
+              : (
+                <span className='h-7'></span>)
+          }
         </div>
 
-      </form>
+        {/* state */}
+        <div className="flex flex-col">
+          <div className='flex items-center justify-between gap-2'>
+            <label htmlFor="state">Estado:</label>
+            <div className='relative w-60'>
+              <select
+                id='stateId'
+                className={
+                  clsx(
+                    'px-2 py-2 border bg-gray-200 text-black focus:outline-none focus:border-gray-800 w-full peer block h-10 p-2 rounded-lg border-solid appearance-none',
+                    {
+                      'border-red-500': errors.state
+                    }
+                  )
+                }
+                {...register('state', { required: true })}
+              >
+                <option value=''>
+                  Selecciona un estado:
+                </option>
+                {states.map((state) => (
+                  <option key={state.id} value={state.id}>
+                    {state.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          {
+            errors.state?.type === 'required'
+              ? (
+                <span className='text-red-500 text-sm pt-2'>* El estado es requerido</span>)
+              : (
+                <span className='h-7'></span>)
+          }
+        </div>
 
-    </>
-  )
-}
+        {/*  categories */}
+        <div className="flex flex-col">
+          <div className='flex items-center justify-between gap-2'>
+            <label htmlFor="category">Categoria:</label>
+            <div className='relative w-60'>
+              <select
+                id='categoryId'
+                className={
+                  clsx(
+                    'px-2 py-2 border bg-gray-200 text-black focus:outline-none focus:border-gray-800 w-full peer block h-10 p-2 rounded-lg border-solid appearance-none',
+                    {
+                      'border-red-500': errors.category
+                    }
+                  )
+                }
+                {...register('category', { required: true })}
+              >
+                <option value=''>
+                  Selecciona una categoria
+                </option>
+                {
+                  categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+          </div>
+          {
+            errors.category?.type === 'required'
+              ? (
+                <span className='text-red-500 text-sm pt-2'>* La categoria es requerida</span>)
+              : (
+                <span className='h-7'></span>)
+          }
+        </div>
 
-function SubmitButton() {
-  const { pending } = useFormStatus()
+        {/*  rama */}
+        <div className="flex flex-col">
+          <div className='flex items-center justify-between gap-2'>
+            <label htmlFor="rama">Rama:</label>
+            <div className='relative w-60'>
+              <select
+                id='ramaId'
+                className={
+                  clsx(
+                    'px-2 py-2 border bg-gray-200 text-black focus:outline-none focus:border-gray-800 w-full peer block h-10 p-2 rounded-lg border-solid appearance-none',
+                    {
+                      'border-red-500': errors.rama
+                    }
+                  )
+                }
+                {...register('rama', { required: true })}
+              >
+                <option value=''>
+                  Selecciona una rama
+                </option>
+                {
+                  ramas.map((rama) => (
+                    <option key={rama.id} value={rama.id} className='capitalize'>
+                      {rama.name}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+          </div>
+          {
+            errors.rama?.type === 'required'
+              ? (
+                <span className='text-red-500 text-sm pt-2'>* La rama es requerida</span>)
+              : (
+                <span className='h-7'></span>)
+          }
+        </div>
 
-  return (
-    <button
-      type="submit"
-      className={clsx({
-        'btn-primary': !pending,
-        'btn-disabled': pending
-      })}
-      disabled={pending}
-    >
-      {pending ? 'Subiendo...' : 'Subir'}
-    </button>
+        {/* venue */}
+        <div className="flex flex-col">
+          <div className='flex items-center justify-between gap-2'>
+            <label htmlFor="venue">Sede:</label>
+            <div className='relative w-60'>
+              <select
+                id='venueId'
+                className={
+                  clsx(
+                    'px-2 py-2 border bg-gray-200 text-black focus:outline-none focus:border-gray-800 w-full peer block h-10 p-2 rounded-lg border-solid appearance-none',
+                    {
+                      'border-red-500': errors.venue
+                    }
+                  )
+                }
+                {...register('venue', { required: true })}
+              >
+                <option value=''>
+                  Selecciona una sede
+                </option>
+                {
+                  venues.map((venue) => (
+                    <option key={venue.id} value={venue.id}>
+                      {venue.name}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+          </div>
+          {
+            errors.venue?.type === 'required'
+              ? (
+                <span className='text-red-500 text-sm pt-2'>* La sede es requerida</span>)
+              : (
+                <span className='h-7'></span>)
+          }
+        </div>
+
+        {/* images */}
+        <div className="flex flex-col">
+          <div className='flex items-center justify-between gap-2'>
+            <span>Fotos: </span>
+            <label htmlFor='imgFile' className="px-2 py-2 border bg-gray-200 text-black focus:outline-none focus:border-gray-800 peer block rounded-md w-60">
+              Imagenes
+              {/* {
+                images.length === 0
+                  ? ('Selecciona imagenes...')
+                  : ('Cambiar imagenes...')
+              } */}
+              <input
+                id='imgFile'
+                type="file"
+                multiple
+                className="hidden"
+                {...register('images')}
+              // onChange={handleImageChange}
+              />
+            </label>
+          </div>
+          {
+            (isValid)
+              ? (
+                <span className='text-red-500 text-sm pt-2'>* La imagen es requerida</span>)
+              : (
+                <span className='h-7'></span>)
+          }
+        </div>
+
+        { /* photographer */}
+        <div className='flex flex-col'>
+          <div className='flex items-center justify-between gap-2'>
+            <label htmlFor="event">Fotografo:</label>
+            <div className='relative w-60'>
+              <select
+                id='photographerId'
+                className={
+                  clsx(
+                    'px-2 py-2 border bg-gray-200 text-black focus:outline-none focus:border-gray-800 w-full peer block h-10 p-2 rounded-lg border-solid appearance-none',
+                    {
+                      'border-red-500': errors.photographer
+                    }
+                  )
+                }
+                {...register('photographer', { required: true })}
+              >
+                <option value=''>
+                  Selecciona un fotografo
+                </option>
+                {photographers.map((photographer) => (
+                  <option key={photographer.id} value={photographer.id}>
+                    {photographer.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          {
+            errors.photographer?.type === 'required'
+              ? (
+                <span className='text-red-500 text-sm pt-2'>* El fotografo es requerido</span>)
+              : (
+                <span className='h-7'></span>)
+          }
+        </div>
+      </div>
+
+      <span className='text-red-500 pb-3'>{errorMessage}</span>
+      {/* buttons */}
+      <div className='flex w-full items-center justify-end gap-5'>
+        <button type='button' className='btn-primary'>
+          <Link href={'/show-photos'}>Cancelar</Link>
+        </button>
+        <button
+          type='submit'
+          className={clsx(
+            'bg-red-600',
+            {
+              'btn-primary': !isSubmitting,
+              'btn-disable': isSubmitting
+            })}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Subiendo...' : 'Subir'}
+        </button>
+      </div>
+    </form >
   )
 }

@@ -12,7 +12,7 @@ export default async function HomePage() {
         <p className='text-lg text-center'>Una plataforma para organizar, cargar y mostrar fotografías de eventos deportivos profesionales para impresión y venta en el sitio.</p>
 
         <div className="flex gap-4">
-          <button className=' p-2 rounded bg-gray-400 hover:bg-gray-200 cursor-pointer w-full'>
+          <button className='btn-primary'>
             {
               !user
                 ? <>

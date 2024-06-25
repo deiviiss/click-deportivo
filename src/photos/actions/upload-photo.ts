@@ -1,59 +1,71 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import cloudinary from '@/libs/cloudinary'
 import prisma from '@/libs/prisma'
 
 export const uploadPhoto = async (
-  prevState: string | undefined,
   formData: FormData) => {
   try {
-    // Assume that the field name in the FormData was updated to img0, img1, ...
-    let index = 0
-    let image
-    const imagesUrls = []
+    const data = Object.fromEntries(formData)
+    let images
 
-    // itera about each image received
-    while ((image = formData.get(`img${index}`)) && typeof image === 'string') {
-      const base64Data = image.replace(/^data:image\/\w+;base64,/, '')
-      const buffer = Buffer.from(base64Data, 'base64')
+    if (formData.getAll('images')) {
+      images = await uploadImages(formData.getAll('images') as File[])
 
-      // upload img to cloudinary
-      const result: { secure_url: string } = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream({ folder: 'click-deportivo' }, (err, result) => {
-          if (err) {
-            reject(err)
+      if (!images) {
+        throw new Error('Error al subir las imagenes')
+      }
+
+      images.map(async (image) => {
+        await prisma.photo.create({
+          data: {
+            url: image || '',
+            photographerId: data.photographer as string,
+            disciplineId: data.discipline as string,
+            eventId: data.event as string,
+            stateId: data.state as string,
+            venueId: data.venue as string,
+            ramaId: data.rama as string,
+            categoryId: data.category as string
           }
-
-          if (result) {
-            resolve({ secure_url: result.secure_url })
-          }
-        }).end(buffer)
+        })
       })
-
-      // save the url of the image uploaded
-      imagesUrls.push(result.secure_url)
-      index++
     }
 
-    // save every image to the database
-    for (const imageUrl of imagesUrls) {
-      await prisma.photo.create({
-        data: {
-          url: imageUrl,
-          eventId: formData.get('eventId') as string,
-          photographerId: formData.get('photographerId') as string,
-          categoryId: formData.get('categoryId') as string,
-          stateId: formData.get('stateId') as string,
-          numberPlayer: Number(formData.get('numberPlayer'))
-        }
-      })
+    revalidatePath('/show-photos')
+
+    return {
+      ok: true,
+      message: 'Imagenes cargadas correctamente'
     }
   } catch (error) {
-    return 'ErrorUploadingImage'
+    // eslint-disable-next-line
+    console.log(error)
+    return {
+      ok: false,
+      message: 'Error al cargar las imagenes'
+    }
   }
+}
 
-  revalidatePath('/show-photos')
-  redirect('/show-photos')
+const uploadImages = async (images: File[]) => {
+  try {
+    const uploadPomises = images.map(async (image: File) => {
+      try {
+        const buffer = await image.arrayBuffer()
+        const base64Image = Buffer.from(buffer).toString('base64')
+
+        return await cloudinary.uploader.upload(`data:image/png;base64,${base64Image}`, { folder: 'click-deportivo' }).then(r => r.secure_url)
+      } catch (error) {
+        return null
+      }
+    })
+
+    const uploadedImages = await Promise.all(uploadPomises)
+
+    return uploadedImages
+  } catch (error) {
+    return null
+  }
 }

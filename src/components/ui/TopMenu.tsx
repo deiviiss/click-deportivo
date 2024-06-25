@@ -11,7 +11,7 @@ export const TopMenu = () => {
   const openFilter = useFilterStore((state) => state.openSideFilter)
 
   return (
-    <nav className="flex px-5 justify-between items-center w-full border-b-2 border-gray-400 shadow-2xl">
+    <nav className="flex px-20 justify-between items-center w-full bg-primary shadow-md shadow-secondary hover:border-r-secondary text-white">
       {/* logo */}
       <div>
         <Link href={'/'}>
@@ -21,19 +21,19 @@ export const TopMenu = () => {
 
       {/* center menu */}
       <div className='hidden sm:block'>
-        <Link href={'/show-photos'} className='m-2 p-2 rounded-md transition-all hover:bg-gray-400'>Fotos</Link>
-        <Link href={'/photographers'} className='m-2 p-2 rounded-md transition-all hover:bg-gray-400'>Fotógrafos</Link>
+        <Link href={'/show-photos'} className='m-2 p-2 pb-1 transition-all border-b-2 border-r-2 border-r-primary hover:border-b-secondary hover:border-r-secondary border-b-primary'>Fotos</Link>
+        <Link href={'/photographers'} className='m-2 p-2 pb-1 transition-all border-b-2 border-r-2 border-r-primary hover:border-b-secondary hover:border-r-secondary border-b-primary '>Fotógrafos</Link>
       </div>
 
       {/* upload photo */}
       <div className='flex items-center'>
-        <Link href={'/upload-photo'} className='mx-2 hover:bg-gray-400 rounded-md transition-all'>
+        <Link href={'/upload-photo'} className='m-2 p-1 transition-all border-2 rounded-full hover:border-secondary border-primary'>
           <IoAdd className='w-5 h-5'></IoAdd>
         </Link>
 
-        <button type='button' onClick={openFilter} className='m-2 p-2 rounded-md transition-all hover:bg-gray-400'>Filtro</button>
+        <button type='button' onClick={openFilter} className='m-2 p-2 pb-0 trans1tion-all border-b-2 border-r-2 border-r-primary hover:border-b-secondary hover:border-r-secondary border-b-primary'>Filtro</button>
 
-        <button type='button' onClick={openMenu} className='m-2 p-2 rounded-md transition-all hover:bg-gray-400'>Menú</button>
+        <button type='button' onClick={openMenu} className='m-2 p-2 pb-0 trans1tion-all border-b-2 border-r-2 border-r-primary hover:border-b-secondary hover:border-r-secondary border-b-primary'>Menú</button>
       </div>
     </nav>
   )

@@ -18,7 +18,7 @@ export const LoginForm = () => {
   }, [state])
 
   return (
-    <form action={dispatch} className="flex flex-col gap-3">
+    <form action={dispatch} className="flex flex-col gap-2">
       <label htmlFor="email">Correo electrónico</label>
       <input
         className="px-5 py-2 border bg-gray-200 rounded mb-5 text-black focus:outline-none focus:border-gray-800"
@@ -28,12 +28,10 @@ export const LoginForm = () => {
 
       <label htmlFor="password">Contraseña</label>
       <input
-        className="px-5 py-2 border bg-gray-200 rounded mb-5 text-black focus:outline-none focus:border-gray-800"
+        className="px-5 py-2 border bg-gray-200 rounded  text-black focus:outline-none focus:border-gray-800"
         type="password"
         name="password"
       />
-
-      <LoginButton />
 
       <div
         className="flex h-8 items-end space-x-1"
@@ -49,6 +47,8 @@ export const LoginForm = () => {
         )}
       </div>
 
+      <LoginButton />
+
       <button
         type='button'
         onClick={async () => await signIn('google')}
@@ -63,9 +63,9 @@ export const LoginForm = () => {
 
       {/* divisor l ine */}
       <div className="flex items-center my-5">
-        <div className="flex-1 border-t border-gray-400"></div>
-        <div className="px-2 text-gray-200">O</div>
-        <div className="flex-1 border-t border-gray-400"></div>
+        <div className="flex-1 border-t border-primary"></div>
+        <div className="px-2 text-primary">O</div>
+        <div className="flex-1 border-t border-primary"></div>
       </div>
 
       <Link href="/auth/new-account" className="btn-secondary text-center">
@@ -83,7 +83,7 @@ function LoginButton() {
       type="submit"
       className={clsx({
         'btn-primary': !pending,
-        'btn-disabled': pending
+        'btn-disable': pending
       })}
       disabled={pending}
     >

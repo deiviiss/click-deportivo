@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { PhotosGrid } from './ui/PhotosGrid'
 import { Title } from '@/components'
 import prisma from '@/libs/prisma'
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 interface WhereConditionType {
   event?: { name: string }
   state?: { name: string }
-  category?: { name: string }
+  discipline?: { name: string }
 }
 
 export default async function ShowImagesPage({
@@ -20,7 +21,7 @@ export default async function ShowImagesPage({
   searchParams?: {
     event?: string
     state?: string
-    category?: string
+    discipline?: string
   }
 }): Promise<JSX.Element> {
   const whereCondition: WhereConditionType = {}
@@ -37,9 +38,9 @@ export default async function ShowImagesPage({
     }
   }
 
-  if (searchParams?.category) {
-    whereCondition.category = {
-      name: searchParams.category
+  if (searchParams?.discipline) {
+    whereCondition.discipline = {
+      name: searchParams.discipline
     }
   }
 
@@ -50,25 +51,30 @@ export default async function ShowImagesPage({
     include: {
       photographer: true,
       event: true,
-      category: true,
+      discipline: true,
       state: true
     }
   })
 
+  //       <div className='flex flex-col gap-3 py-6'>
+  // < Title title = 'Pagina para mostrar imagenes' className = 'text-center text-xl' subtitle = 'Todas las imagenes de todos los eventos' />
+  // </div >
   return (
-    <>
-      <div className='flex flex-col gap-3 py-6'>
-        <Title title='Pagina para mostrar imagenes' className='text-center text-xl' subtitle='Todas las imagenes de todos los eventos' />
-      </div>
-
+    <div className='text-black'>
       {
         images.length === 0
           ? (
-            <h1 className='text-4xl'>No hay imagenes para mostrar</h1>)
+            <div className='flex flex-col items-center justify-center mx-auto mt-10 gap-3'>
+              <Title title='No hay imagenes para mostrar' subtitle='' className='text-center text-2xl w-full' />
+              <span>
+                Comienza a agregar
+                <Link className='hover:underline' href={'/upload-photo'}> imagenes</Link>
+
+              </span>
+            </div>)
           : (
             <PhotosGrid photos={images} />)
       }
-
-    </>
+    </div>
   )
 }

@@ -22,7 +22,7 @@ export const Sidebar = () => {
         isSideMenuOpen && (
           <>
             {/* background */}
-            <div className='fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30'>
+            <div className='fixed top-0 left-0 w-screen h-screen z-10 bg-primary opacity-30'>
             </div>
             {/* blur */}
             <div onClick={closeMenu} className='fade-in fixed top-0 left-0 w-screen h-screen z-10 backdrop-filter backdrop-blur-sm'>
@@ -33,7 +33,7 @@ export const Sidebar = () => {
 
       <nav className={
         clsx(
-          'fixed p-5 right-0 top-0 w-full md:w-[350px] h-screen bg-gray-500 z-20 shadow-2xl transform transition-all duration-300',
+          'fixed p-5 right-0 top-0 w-full md:w-[350px] h-screen bg-primary z-20 shadow-2xl transform transition-all duration-300 text-white',
           {
             'translate-x-full': !isSideMenuOpen
           }
@@ -41,25 +41,25 @@ export const Sidebar = () => {
       }>
 
         <IoCloseOutline
-          size={50}
-          className='absolute top-5 right-5 cursor-pointer'
+          size={35}
+          className='absolute top-5 right-5 cursor-pointer hover:text-tertiary '
           onClick={closeMenu}
         />
 
         {/* input */}
         <div className='relative mt-14'>
-          <IoSearchOutline size={20} className='absolute top-1 left-2 text-gray-400' />
+          <IoSearchOutline size={20} className='absolute top-2 left-2 text-secondary' />
           <input
             type='text'
             placeholder='Buscar'
-            className='w-full bg-gray-50 rounded pl-10 pr-10 border-b-2 text-xl border-gray-600 focus:outline-none focus:border-gray-800'
+            className='w-full bg-white rounded pl-10 pr-10 py-1 border-b-2 text-lg border-secondary focus:outline-none focus:border-tertiary'
           />
         </div>
 
         {/* menú */}
         <div>
           <Link href='/profile'
-            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+            className='flex items-center mt-10 p-2  border-b-2 border-primary hover:border-b-secondary border-r-2 border-r-primary hover:border-r-secondary transition-all'
             onClick={() => { closeMenu() }}
           >
             <IoPersonOutline size={30} />
@@ -67,7 +67,7 @@ export const Sidebar = () => {
           </Link>
 
           <Link href='/show-photos'
-            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+            className='flex items-center mt-10 p-2  border-b-2 border-primary hover:border-b-secondary border-r-2 border-r-primary hover:border-r-secondary transition-all'
             onClick={() => { closeMenu() }}
           >
             <MdOutlinePhoto size={30} />
@@ -75,7 +75,7 @@ export const Sidebar = () => {
           </Link>
 
           <Link href='/photographers'
-            className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+            className='flex items-center mt-10 p-2  border-b-2 border-primary hover:border-b-secondary border-r-2 border-r-primary hover:border-r-secondary transition-all'
             onClick={() => { closeMenu() }}
           >
             <MdOutlinePhotoCamera size={30} />
@@ -85,7 +85,7 @@ export const Sidebar = () => {
           {
             user
               ? <button
-                className='w-full flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+                className='w-full flex items-center mt-10 p-2  border-b-2 border-primary hover:border-b-secondary border-r-2 border-r-primary hover:border-r-secondary transition-all'
                 onClick={async () => { await logout() }}
               >
                 <IoLogOutOutline size={30} />
@@ -93,7 +93,7 @@ export const Sidebar = () => {
               </button>
               : <Link
                 href='/auth/login'
-                className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+                className='flex items-center mt-10 p-2  border-b-2 border-primary hover:border-b-secondary border-r-2 border-r-primary hover:border-r-secondary transition-all'
                 onClick={() => { closeMenu() }}
               >
                 <IoLogInOutline size={30} />
@@ -105,7 +105,7 @@ export const Sidebar = () => {
         </div>
 
         <Link href='/events'
-          className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+          className='flex items-center mt-10 p-2  border-b-2 border-primary hover:border-b-secondary border-r-2 border-r-primary hover:border-r-secondary transition-all'
           onClick={() => { closeMenu() }}
         >
           <MdOutlineEmojiEvents size={30} />
@@ -113,7 +113,7 @@ export const Sidebar = () => {
         </Link>
 
         <Link href='/users'
-          className='flex items-center mt-10 p-2 hover:bg-gray-600 rounded transition-all'
+          className='flex items-center mt-10 p-2  border-b-2 border-primary hover:border-b-secondary border-r-2 border-r-primary hover:border-r-secondary transition-all'
           onClick={() => { closeMenu() }}
         >
           <IoPeopleOutline size={30} />

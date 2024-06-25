@@ -1,13 +1,13 @@
 'use client'
 
-import { type Category } from '@prisma/client'
+import { type Discipline } from '@prisma/client'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 
 interface Props {
-  categories: Category[]
+  disciplines: Discipline[]
 }
 
-export function PhotoCategoryFilter({ categories }: Props): JSX.Element {
+export function PhotoCategoryFilter({ disciplines }: Props): JSX.Element {
   const filterParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -21,23 +21,23 @@ export function PhotoCategoryFilter({ categories }: Props): JSX.Element {
   }
 
   return (
-    <div className='flex flex-col py-5' >
-      <div className='flex justify-center items-center gap-2'>
+    <div className='flex flex-col py-5 w-full text-white' >
+      <div className='flex justify-between items-center gap-2'>
         <label htmlFor='category'>
-          Categoria
+          Disciplina
         </label>
         <select
-          id='category'
-          name='category'
+          id='discipline'
+          name='discipline'
           onChange={(e) => {
             handleFilter(e)
           }}
           className='rounded-lg text-black py-1 px-2'
         >
           <option value=''>Todos</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.name}>
-              {category.name}
+          {disciplines.map((dicipline) => (
+            <option key={dicipline.id} value={dicipline.name}>
+              {dicipline.name}
             </option>
           ))}
         </select>

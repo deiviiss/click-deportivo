@@ -20,14 +20,16 @@ export default async function DashboardLayout({
 
   const events = await prisma.event.findMany()
   const states = await prisma.state.findMany()
-  const categories = await prisma.category.findMany()
+  const disciplines = await prisma.discipline.findMany()
 
   return (
-    <main className='flex flex-col items-center justify-center w-full p-2' >
+    <>
       <TopMenu />
       <Sidebar />
-      <SideFilter events={events} states={states} categories={categories} />
-      {children}
-    </main >
+      <main className='flex flex-col items-center justify-center w-full p-2' >
+        <SideFilter events={events} states={states} disciplines={disciplines} />
+        {children}
+      </main >
+    </>
   )
 }

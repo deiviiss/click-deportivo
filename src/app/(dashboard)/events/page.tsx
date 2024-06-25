@@ -17,8 +17,8 @@ export default async function EventosPage({
   }
 }): Promise<JSX.Element> {
   const user = await getUserSessionServer()
-  const isAdmin = user?.roles.includes('admin')
-  if (!isAdmin) redirect('/')
+  const isAdmin = user?.roles?.includes('admin')
+  if (!isAdmin) redirect('/show-photos')
 
   const events = await prisma.event.findMany()
 
